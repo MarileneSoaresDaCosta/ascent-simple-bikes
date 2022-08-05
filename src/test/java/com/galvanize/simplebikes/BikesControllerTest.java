@@ -1,9 +1,11 @@
 package com.galvanize.simplebikes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,6 +28,8 @@ public class BikesControllerTest {
 
     @MockBean
     BikesService bikesService;
+
+    ObjectMapper mapper = new ObjectMapper();
 
     // GET get a list of all bikes
     @Test
@@ -51,7 +57,20 @@ public class BikesControllerTest {
 
 
     // POST a new bike
-
+    @Test
+    void addBike_valid_returnsNewBike() throws Exception {
+        // Arrange
+        Bike bike = new Bike("Ross", 22, "Red");
+        when(bikesService.addBike(any(Bike.class))).thenReturn(bike);
+        // Act
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/bikes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(bike)))
+                .andDo(print())
+        // Assert
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("model").value("Ross"));
+    }
 
     // Arrange
 
