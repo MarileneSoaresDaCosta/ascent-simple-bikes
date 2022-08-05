@@ -1,9 +1,6 @@
 package com.galvanize.simplebikes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BikesController {
@@ -22,6 +19,12 @@ public class BikesController {
     @PostMapping("/api/bikes")
     public Bike addBike(@RequestBody Bike bike) {
         return bikesService.addBike(bike);
+    }
+
+    @GetMapping("/api/bikes/{model}")
+    public BikesList getBikes(@PathVariable String model) {
+        BikesList bikes = bikesService.getBikes(model);
+        return bikes;
     }
 
 }

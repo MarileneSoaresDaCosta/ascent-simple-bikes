@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -72,17 +73,27 @@ public class BikesControllerTest {
                 .andExpect(jsonPath("model").value("Ross"));
     }
 
-    // Arrange
+    // GET search /api/bikes/{model}
+    @Test
+    void getBikes_withParam_returnsMatchingBikes() throws Exception {
+        // Arrange
+        List<Bike> bikes = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Bike bike;
+            if (i % 2 == 0) {
+                bike = new Bike("Trek", 42, "Silver" );
+            } else {
+                bike = new Bike("Schwinn", 40, "Blue" );
+            }
+            bikes.add(bike);
+        }
+        when(bikesService.getBikes(anyString())).thenReturn(new BikesList(bikes));
+        // Act
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/bikes/Trek" ))
+                .andDo(print())
+        // Assert
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.bikes", hasSize(5)));
+    }
 
-    // Act
-
-    // Assert
-    // GET search for a bike
-
-
-    // Arrange
-
-    // Act
-
-    // Assert
 }
