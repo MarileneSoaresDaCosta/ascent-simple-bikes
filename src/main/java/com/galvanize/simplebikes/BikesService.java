@@ -2,6 +2,8 @@ package com.galvanize.simplebikes;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BikesService {
     BikesRepository bikesRepository;
@@ -15,6 +17,10 @@ public class BikesService {
     }
 
     public BikesList getBikes(String model) {
+        List<Bike> bikes = bikesRepository.findByModelContains(model);
+        if(!bikes.isEmpty()){
+            return new BikesList(bikes);
+        }
         return null;
     }
 

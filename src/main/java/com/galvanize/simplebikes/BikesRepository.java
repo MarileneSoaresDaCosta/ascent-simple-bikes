@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface BikesRepository extends JpaRepository<Bike, Long> {
-
+    List<Bike> findByModelContains(String model);
 
 }
