@@ -19,6 +19,6 @@ public class BikesService {
     }
 
     public Bike addBike(Bike bike){
-        return null;
+        return bikesRepository.save(bike);
     }
 }
