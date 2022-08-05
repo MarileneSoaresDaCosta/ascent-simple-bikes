@@ -1,6 +1,14 @@
 package com.galvanize.simplebikes;
 
+import javax.annotation.processing.Generated;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "bikes")
 public class Bike {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String model;
     private int height;
     private String color;
