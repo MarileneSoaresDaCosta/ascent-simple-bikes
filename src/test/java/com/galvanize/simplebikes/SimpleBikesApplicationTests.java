@@ -60,22 +60,40 @@ class SimpleBikesApplicationTests {
 
     @Test
     void getBikes_exists_returnsBikesList() {
-        ResponseEntity<BikesList> response= restTemplate.getForEntity("/api/bikes", BikesList.class);
+        ResponseEntity<BikesList> response = restTemplate.getForEntity("/api/bikes", BikesList.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().isEmpty()).isFalse();
 
-        for(Bike bike : response.getBody().getBikes()){
+        for (Bike bike : response.getBody().getBikes()) {
             System.out.println(bike);
         }
-
     }
 
-    // search for bike model
+
+        // search for bike model
+
+
+    @Test
+    void getBikes_search_returnMatchingModels() {
+
+        int randomPick =r.nextInt(50);
+        String model = testBikes.get(randomPick).getModel();
+
+        ResponseEntity<BikesList> response= restTemplate.getForEntity(
+                String.format("/api/bikes/" +model), BikesList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().isEmpty()).isFalse();
+
+            for (Bike bike : response.getBody().getBikes()) {
+            System.out.println(bike);
+        }
+}
+
+
 
     // add bike
-
-
     @Test
     void addBike_valid_returnsNewBike() {
         Bike bike  = new Bike("Wing", 40, "RED");
